@@ -71,6 +71,7 @@ Boston, MA  02110-1301, USA.
 #include "csw.h"
 #include "serialdevices.h"
 #include "Arm.h"
+#include "host.h"
 #include "version.h"
 #include "sprowcopro.h"
 
@@ -2395,6 +2396,9 @@ void BeebWin::UpdateOptiMenu() {
 	CheckMenuItem(ID_BHARDWARE, BHardware);
 	CheckMenuItem(ID_TSTYLE, THalfMode);
 	CheckMenuItem(ID_PSAMPLES, PartSamples);
+	CheckMenuItem(ID_EMTACN, (EmulatorTrap & 1) != 0);
+	CheckMenuItem(ID_EMTWSS, (EmulatorTrap & 2) != 0);
+	CheckMenuItem(ID_EMTBAS, (EmulatorTrap & 16) != 0);
 }
 
 /***************************************************************************/
@@ -3519,6 +3523,19 @@ void BeebWin::HandleCommand(int MenuId)
 
 	case ID_BHARDWARE:
 		BHardware = !BHardware;
+		UpdateOptiMenu();
+		break;
+
+	case ID_EMTACN:
+		EmulatorTrap=(EmulatorTrap^1)&0xF3;
+		UpdateOptiMenu();
+		break;
+	case ID_EMTWSS:
+		EmulatorTrap=(EmulatorTrap^2)&0xF3;
+		UpdateOptiMenu();
+		break;
+	case ID_EMTBAS:
+		EmulatorTrap=EmulatorTrap^16;
 		UpdateOptiMenu();
 		break;
 

@@ -373,4 +373,3 @@ char *p;
     WriteLog("%s\n", buff);
 		
 }
-
