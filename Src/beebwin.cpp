@@ -4115,6 +4115,7 @@ void BeebWin::HandleCommandLineFile(int drive, const char *CmdLineFile)
 	bool uef = false;
 	bool csw = false;
 	bool img = false;
+	bool fsd = false;
 	
 	if (CmdLineFile[0] != 0)
 	{
@@ -4139,6 +4140,8 @@ void BeebWin::HandleCommandLineFile(int drive, const char *CmdLineFile)
 				csw = true;
 			else if (_stricmp(ext+1, "img") == 0)
 				img = true;
+			else if (_stricmp(ext+1, "fsd") == 0)
+				fsd = true;
 			else
 			{
 				char errstr[200];
@@ -4231,6 +4234,13 @@ void BeebWin::HandleCommandLineFile(int drive, const char *CmdLineFile)
 					LoadSimpleDiscImage(FileName, drive, 0, 80); // Treat like an ssd
 				else
 					Load1770DiscImage(FileName, drive, DiscType::IMG, m_hMenu);
+			}
+			if (fsd)
+			{
+				if (NativeFDC)
+					LoadFSDDiscImage(FileName, drive);
+				else
+					MessageBox(m_hWnd, "FSD images are only supported with the 8271 FDC", "BeebEm", MB_ICONERROR | MB_OK);
 			}
 		}
 		else // Model::Master128
